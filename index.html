@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math Class Portal</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= LOGIN ================= -->
+<div id="loginScreen">
+  <div class="login-box">
+    <h2>Math Class Portal</h2>
+    <p>Sign in to continue</p>
+
+    <div class="tabs">
+      <button id="tabStudent" class="active" onclick="switchTab('student')">Student</button>
+      <button id="tabAdmin" onclick="switchTab('admin')">Admin</button>
+    </div>
+
+    <div id="studentLogin">
+      <input id="sUser" placeholder="Choose a username" />
+      <input id="sCode" placeholder="Enter your access code" />
+      <button onclick="studentLogin()" style="width:100%;margin-top:8px">Login</button>
+      <p style="margin-top:12px;font-size:.8rem">First time? Ask your teacher for a code.</p>
+    </div>
+
+    <div id="adminLogin" class="hidden">
+      <input id="aPass" type="password" placeholder="Admin password" onkeydown="if(event.key==='Enter')adminLogin()" />
+      <button onclick="adminLogin()" style="width:100%;margin-top:8px">Login as Admin</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= APP ================= -->
+<div id="app" class="app-layout hidden">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">∑</div>
+      <div>
+        <div class="brand-title">Math Portal</div>
+        <div class="brand-sub" id="whoami">—</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-section="homework" onclick="showSection('homework')">
+        <span class="nav-ico">📚</span> Homework
+      </button>
+      <button class="nav-item" data-section="chat" onclick="showSection('chat')">
+        <span class="nav-ico">💬</span> Class Chat
+      </button>
+      <button class="nav-item" data-section="leaderboard" onclick="showSection('leaderboard')">
+        <span class="nav-ico">🏆</span> Leaderboard
+      </button>
+      <button class="nav-item" data-section="shop" onclick="showSection('shop')">
+        <span class="nav-ico">🛍️</span> Shop
+      </button>
+      <button class="nav-item" data-section="calc" onclick="showSection('calc')">
+        <span class="nav-ico">🧮</span> Calculator
+      </button>
+      <div class="nav-divider"></div>
+      <button class="nav-item admin-only hidden" data-section="admin" onclick="showSection('admin')">
+        <span class="nav-ico">⚙️</span> Admin Panel
+      </button>
+    </nav>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- HOMEWORK -->
+    <section id="sec-homework" class="section">
+      <h1 class="page-title">📚 Homework</h1>
+      <div id="hwList"><div class="empty">No homework posted yet.</div></div>
+    </section>
+
+    <!-- CHAT -->
+    <section id="sec-chat" class="section hidden">
+      <h1 class="page-title">💬 Class Chat</h1>
+      <div class="card chat-card">
+        <div id="chatBox"></div>
+        <div class="row">
+          <input id="chatInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter')sendChat()" />
+          <button onclick="sendChat()">Send</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section id="sec-leaderboard" class="section hidden">
+      <h1 class="page-title">🏆 Top 10 Students</h1>
+      <div id="leaderboard"><div class="empty">No marks uploaded yet.</div></div>
+    </section>
+
+    <!-- SHOP -->
+    <section id="sec-shop" class="section hidden">
+      <h1 class="page-title">🛍️ Buy</h1>
+      <div id="shopGrid" class="shop-grid"><div class="empty">No items yet.</div></div>
+    </section>
+
+    <!-- CALCULATOR -->
+    <section id="sec-calc" class="section hidden">
+      <h1 class="page-title">🧮 Math Calculator</h1>
+
+      <div class="calc-tabs">
+        <button class="calc-tab active" data-calc="basic" onclick="switchCalc('basic')">Basic</button>
+        <button class="calc-tab" data-calc="scientific" onclick="switchCalc('scientific')">Scientific</button>
+        <button class="calc-tab" data-calc="graph" onclick="switchCalc('graph')">Graph</button>
+        <button class="calc-tab" data-calc="geometry" onclick="switchCalc('geometry')">Geometry</button>
+      </div>
+
+      <!-- BASIC -->
+      <div id="calc-basic" class="calc-panel">
+        <div class="card calc-card">
+          <div class="calc-display">
+            <div class="calc-history" id="basicHistory">&nbsp;</div>
+            <div class="calc-output" id="basicOutput">0</div>
+          </div>
+          <div class="calc-keys">
+            <button class="calc-btn danger" onclick="basicClear()">C</button>
+            <button class="calc-btn" onclick="basicBack()">⌫</button>
+            <button class="calc-btn" onclick="basicInput('%')">%</button>
+            <button class="calc-btn op" onclick="basicInput('/')">÷</button>
+
+            <button class="calc-btn" onclick="basicInput('7')">7</button>
+            <button class="calc-btn" onclick="basicInput('8')">8</button>
+            <button class="calc-btn" onclick="basicInput('9')">9</button>
+            <button class="calc-btn op" onclick="basicInput('*')">×</button>
+
+            <button class="calc-btn" onclick="basicInput('4')">4</button>
+            <button class="calc-btn" onclick="basicInput('5')">5</button>
+            <button class="calc-btn" onclick="basicInput('6')">6</button>
+            <button class="calc-btn op" onclick="basicInput('-')">−</button>
+
+            <button class="calc-btn" onclick="basicInput('1')">1</button>
+            <button class="calc-btn" onclick="basicInput('2')">2</button>
+            <button class="calc-btn" onclick="basicInput('3')">3</button>
+            <button class="calc-btn op" onclick="basicInput('+')">+</button>
+
+            <button class="calc-btn" onclick="basicInput('(')">(</button>
+            <button class="calc-btn" onclick="basicInput('0')">0</button>
+            <button class="calc-btn" onclick="basicInput('.')">.</button>
+            <button class="calc-btn eq" onclick="basicEquals()">=</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCIENTIFIC -->
+      <div id="calc-scientific" class="calc-panel hidden">
+        <div class="card calc-card">
+          <div class="calc-display">
+            <div class="calc-history" id="sciHistory">&nbsp;</div>
+            <div class="calc-output" id="sciOutput">0</div>
+          </div>
+          <div class="calc-keys sci">
+            <button class="calc-btn" onclick="sciFn('sin')">sin</button>
+            <button class="calc-btn" onclick="sciFn('cos')">cos</button>
+            <button class="calc-btn" onclick="sciFn('tan')">tan</button>
+            <button class="calc-btn" onclick="sciFn('log')">log</button>
+            <button class="calc-btn" onclick="sciFn('ln')">ln</button>
+
+            <button class="calc-btn" onclick="sciFn('sqrt')">√</button>
+            <button class="calc-btn" onclick="sciFn('^')">x^y</button>
+            <button class="calc-btn" onclick="sciFn('pi')">π</button>
+            <button class="calc-btn" onclick="sciFn('e')">e</button>
+            <button class="calc-btn" onclick="sciFn('fact')">n!</button>
+
+            <button class="calc-btn" onclick="sciInput('(')">(</button>
+            <button class="calc-btn" onclick="sciInput(')')">)</button>
+            <button class="calc-btn" onclick="sciInput('%')">%</button>
+            <button class="calc-btn op" onclick="sciInput('/')">÷</button>
+            <button class="calc-btn danger" onclick="sciClear()">C</button>
+
+            <button class="calc-btn" onclick="sciInput('7')">7</button>
+            <button class="calc-btn" onclick="sciInput('8')">8</button>
+            <button class="calc-btn" onclick="sciInput('9')">9</button>
+            <button class="calc-btn op" onclick="sciInput('*')">×</button>
+            <button class="calc-btn" onclick="sciBack()">⌫</button>
+
+            <button class="calc-btn" onclick="sciInput('4')">4</button>
+            <button class="calc-btn" onclick="sciInput('5')">5</button>
+            <button class="calc-btn" onclick="sciInput('6')">6</button>
+            <button class="calc-btn op" onclick="sciInput('-')">−</button>
+            <button class="calc-btn eq" onclick="sciEquals()" style="grid-row:span 3">=</button>
+
+            <button class="calc-btn" onclick="sciInput('1')">1</button>
+            <button class="calc-btn" onclick="sciInput('2')">2</button>
+            <button class="calc-btn" onclick="sciInput('3')">3</button>
+            <button class="calc-btn op" onclick="sciInput('+')">+</button>
+
+            <button class="calc-btn" onclick="sciInput('0')">0</button>
+            <button class="calc-btn" onclick="sciInput('.')">.</button>
+            <button class="calc-btn" onclick="sciInput('-')">±</button>
+            <button class="calc-btn" disabled style="opacity:.3">·</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GRAPH -->
+      <div id="calc-graph" class="calc-panel hidden">
+        <div class="card">
+          <h2>Graph a Function</h2>
+          <p style="color:var(--muted);font-size:.9rem;margin-bottom:10px">Use x as the variable. Example: <code>sin(x)</code>, <code>x^2 - 3</code>, <code>1/x</code></p>
+          <div class="row">
+            <input id="graphInput" placeholder="f(x) = ..." value="x^2" />
+            <button onclick="drawGraph()">Plot</button>
+          </div>
+          <canvas id="graphCanvas" width="800" height="500" style="width:100%;max-width:100%;margin-top:14px;background:#0f172a;border-radius:10px"></canvas>
+        </div>
+      </div>
+
+      <!-- GEOMETRY -->
+      <div id="calc-geometry" class="calc-panel hidden">
+        <div class="card">
+          <h2>Geometry Calculator</h2>
+          <select id="geoShape" onchange="renderGeoInputs()">
+            <option value="circle">Circle</option>
+            <option value="square">Square</option>
+            <option value="rect">Rectangle</option>
+            <option value="triangle">Triangle (base × height)</option>
+            <option value="sphere">Sphere</option>
+            <option value="cylinder">Cylinder</option>
+          </select>
+          <div id="geoInputs" style="margin-top:12px"></div>
+          <button onclick="calcGeometry()" style="margin-top:10px">Calculate</button>
+          <div id="geoResult" class="geo-result"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ADMIN -->
+    <section id="sec-admin" class="section hidden">
+      <h1 class="page-title">⚙️ Admin Panel</h1>
+
+      <!-- Codes -->
+      <div class="card">
+        <h2>Access Codes</h2>
+        <p class="muted">Generate codes and give them to students. Each code works once. You can disable a code anytime.</p>
+        <button onclick="generateCode()">+ Generate New Code</button>
+        <div id="codesList" class="codes-list"></div>
+      </div>
+
+      <!-- Homework -->
+      <div class="card">
+        <h2>Post Homework</h2>
+        <input id="hwTitle" placeholder="Title (e.g. Chapter 5 exercises)" />
+        <textarea id="hwDesc" placeholder="Description / instructions"></textarea>
+        <input id="hwDue" type="date" />
+        <label class="file-label">
+          <input id="hwFile" type="file" accept="image/*,.pdf" />
+          <span>📎 Attach image or PDF (optional)</span>
+        </label>
+        <button onclick="addHomework()" style="margin-top:8px">Post Homework</button>
+        <div id="hwAdminList" style="margin-top:16px"></div>
+      </div>
+
+      <!-- Marks -->
+      <div class="card">
+        <h2>Student Marks (Leaderboard)</h2>
+        <p class="muted">Upload name + marks. Top 10 are ranked automatically.</p>
+        <div class="row">
+          <input id="mName" placeholder="Student name" />
+          <input id="mMarks" type="number" placeholder="Marks" />
+          <button onclick="addMark()">Add</button>
+        </div>
+        <div id="marksList" style="margin-top:16px"></div>
+      </div>
+
+      <!-- Shop -->
+      <div class="card">
+        <h2>Shop Items</h2>
+        <input id="shopName" placeholder="Item name" />
+        <textarea id="shopDesc" placeholder="Description"></textarea>
+        <input id="shopPrice" type="number" placeholder="Price" />
+        <input id="shopImg" type="file" accept="image/*" />
+        <button onclick="addShopItem()" style="margin-top:8px">Add Item</button>
+        <div id="shopAdminList" style="margin-top:16px"></div>
+      </div>
+
+      <!-- Danger -->
+      <div class="card">
+        <h2>Danger Zone</h2>
+        <button class="danger" onclick="clearChat()">Clear Chat</button>
+        <button class="danger" onclick="clearAll()" style="margin-left:8px">Reset Everything</button>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Custom alert/confirm -->
+<div id="modalOverlay" class="modal-overlay hidden">
+  <div class="modal">
+    <div class="modal-icon" id="modalIcon">✓</div>
+    <h3 id="modalTitle">Success</h3>
+    <p id="modalMsg"></p>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
